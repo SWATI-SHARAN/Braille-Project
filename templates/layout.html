@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeakDots - Optical Braille Recognition</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{{ url_for('front_page') }}" class="nav-logo">
+                <span style="font-size: 1.8rem;">⠼⠎</span> SpeakDots
+            </a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('front_page') }}" class="nav-link">Home</a></li>
+                <li><a href="{{ url_for('upload_page') }}" class="nav-link">Convert Image</a></li>
+                <li><a href="{{ url_for('convert_text_page') }}" class="nav-link">Text to Braille</a></li>
+                <li><a href="{{ url_for('how_it_works_page') }}" class="nav-link">How It Works</a></li>
+                <li><a href="{{ url_for('accessibility_page') }}" class="nav-link">Accessibility</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="{{ url_for('how_it_works_page') }}">Technology</a>
+                <a href="{{ url_for('accessibility_page') }}">Accessibility Statement</a>
+                <a href="#">Github</a>
+            </div>
+            <p>&copy; 2024 SpeakDots Assistive Technology. Designed for Accessibility.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple script to mark active nav link
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>How It Works</h1>
+        <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto; color: var(--text-light);">
+            SpeakDots uses advanced Deep Learning and Computer Vision to bridge the communication gap.
+        </p>
+    </div>
+
+    <div class="features-grid">
+        <div class="card feature-card" style="text-align: left;">
+            <div class="feature-icon">1</div>
+            <h3>Image Preprocessing</h3>
+            <p>When you upload an image, our system first cleans it. We apply noise reduction, thresholding, and contour
+                detection to isolate the individual Braille dots from the paper texture.</p>
+        </div>
+
+        <div class="card feature-card" style="text-align: left;">
+            <div class="feature-icon">2</div>
+            <h3>Character Segmentation</h3>
+            <p>The system identifies each Braille cell (a 2x3 grid of dots). It slices the image into individual
+                character blocks, preparing them for the recognition engine.</p>
+        </div>
+
+        <div class="card feature-card" style="text-align: left;">
+            <div class="feature-icon">3</div>
+            <h3>CNN Recognition</h3>
+            <p>A Convolutional Neural Network (CNN) trained on thousands of Braille samples analyzes each cell. It
+                predicts the corresponding English letter with high accuracy.</p>
+        </div>
+
+        <div class="card feature-card" style="text-align: left;">
+            <div class="feature-icon">4</div>
+            <h3>Text Reconstruction</h3>
+            <p>The designated characters are stitched back together into words and sentences. Finally, our
+                Text-to-Speech engine converts this text into spoken audio.</p>
+        </div>
+    </div>
+
+    <div class="card" style="text-align: center; margin-top: 2rem; background: #E8EAF6;">
+        <h2>The Architecture</h2>
+        <div style="padding: 2rem; font-family: monospace;">
+            [ Input Image ] -> [ OpenCV Processing ] -> [ CNN Model ] -> [ Text Output ]
+        </div>
+    </div>
+</div>
+{% endblock %}
