@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SpeakDots - Optical Braille Recognition</title>
+	<meta name="description"
+		content="SpeakDots bridges the gap between physical Braille and digital text. Instantly convert Braille images to English text and speech using AI.">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+	<!-- Icons -->
+	<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+	<!-- SpeakDots CSS -->
+	<link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+
+	<!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+	<nav class="navbar" role="navigation" aria-label="Main navigation">
+		<div class="container nav-container">
+			<a href="#" class="nav-logo" onclick="showSection('home'); return false;" aria-label="SpeakDots home">
+				<span aria-hidden="true" style="font-size:1.8rem;">⠼⠎</span> SpeakDots
+			</a>
+			<button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation"
+				aria-expanded="false">&#9776;</button>
+			<ul class="nav-links" id="nav-links">
+				<li><a href="#" class="nav-link" id="nav-home"
+						onclick="showSection('home');         return false;">Home</a></li>
+				<li><a href="#" class="nav-link" id="nav-convert-img"
+						onclick="showSection('convert-img');  return false;">Convert Image</a></li>
+				<li><a href="#" class="nav-link" id="nav-text-braille"
+						onclick="showSection('text-braille'); return false;">Text to Braille</a></li>
+				<li><a href="#" class="nav-link" id="nav-how-it-works"
+						onclick="showSection('how-it-works'); return false;">How It Works</a></li>
+				<li><a href="#" class="nav-link" id="nav-accessibility"
+						onclick="showSection('accessibility'); return false;">Accessibility</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+	<main>
+
+		<!-- ── HOME ─────────────────────────────────────────────────── -->
+		<div id="section-home" class="page-section active">
+			<div class="container">
+				<section class="hero animate-fade-in">
+					<h1>Making Braille Accessible Through AI</h1>
+					<p>SpeakDots bridges the gap between physical Braille and digital text. Instantly convert Braille
+						images to English text and speech, or translate everyday text into Braille.</p>
+					<div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+						<button onclick="showSection('convert-img')" class="btn btn-primary">Convert Braille
+							Image</button>
+						<button onclick="showSection('text-braille')" class="btn btn-secondary">Text to Braille</button>
+					</div>
+				</section>
+
+				<section class="features-grid">
+					<div class="card feature-card">
+						<div class="feature-icon">👁️‍🗨️</div>
+						<h3>Optical Braille Recognition</h3>
+						<p>The CNN technology extracts characters from images with high precision.</p>
+					</div>
+					<div class="card feature-card">
+						<div class="feature-icon">🔊</div>
+						<h3>Text-to-Speech</h3>
+						<p>Listen to your converted text instantly with our built-in audio engine.</p>
+					</div>
+					<div class="card feature-card">
+						<div class="feature-icon">⌨️</div>
+						<h3>Bidirectional Tool</h3>
+						<p>Not just reading—write and learn Braille by converting English text to dots.</p>
+					</div>
+				</section>
+			</div>
+		</div>
+
+		<!-- ── CONVERT IMAGE ─────────────────────────────────────────── -->
+		<div id="section-convert-img" class="page-section">
+			<div class="container">
+				<div style="text-align:center; margin-bottom:2rem;">
+					<h2>Convert Braille Image to Text</h2>
+					<p>Upload a clear image of a Braille document to extract its content.</p>
+				</div>
+
+				<div class="card" style="max-width:800px; margin:0 auto;">
+
+					<!-- Alert area -->
+					<div id="alert-wrapper" role="alert" aria-live="polite"></div>
+
+					<!-- Drop / file area -->
+					<div class="form-group">
+						<label for="file-input" class="file-upload-area" id="upload-label">
+							<span style="font-size:2.5rem; display:block; margin-bottom:1rem;"
+								aria-hidden="true">📂</span>
+							<span style="font-weight:600; font-size:1.1rem;" id="upload-label-text">Drag &amp; Drop or
+								Click to Upload</span>
+							<span style="display:block; font-size:0.9rem; color:#777; margin-top:0.5rem;">Supports JPG,
+								PNG, JPEG</span>
+							<input type="file" id="file-input" name="file" accept=".jpg,.jpeg,.png" class="sr-only"
+								aria-label="Select Braille image file">
+						</label>
+					</div>
+
+					<!-- Action buttons -->
+					<div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.5rem;">
+						<button id="convert-btn" class="btn btn-primary" onclick="uploadFile()">
+							Convert to Text
+						</button>
+						<button id="loading-btn" class="btn btn-primary" style="display:none;" disabled>
+							<span class="spinner" aria-hidden="true"></span> Processing…
+						</button>
+						<button id="cancel-btn" class="btn btn-danger-outline" style="display:none;">
+							Cancel
+						</button>
+					</div>
+
+					<!-- Progress bar -->
+					<div class="progress-wrap" id="progress-wrap">
+						<p class="progress-label" id="progress-label">0% uploaded</p>
+						<div class="progress-bar-bg">
+							<div class="progress-bar-fill" id="progress-bar"></div>
+						</div>
+					</div>
+
+					<!-- Result area (hidden until conversion) -->
+					<div id="result-area" class="result-section" style="display:none;">
+						<h3>Processed Image</h3>
+						<img id="result-image" src="/coverimage" alt="Processed Braille image with dot markers"
+							class="result-image" style="margin-bottom:1.5rem;">
+
+						<h3>Recognised Text</h3>
+						<div class="result-text-box" id="result-text" aria-live="polite"></div>
+
+						<div style="margin-top:1.5rem; display:flex; gap:1rem; flex-wrap:wrap;">
+							<button onclick="speakResult()" class="btn btn-secondary" id="play-btn">
+								🔊 Play Audio
+							</button>
+							<button onclick="clearResult()" class="btn btn-outline">
+								Upload Another
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ── TEXT TO BRAILLE ───────────────────────────────────────── -->
+		<div id="section-text-braille" class="page-section">
+			<div class="container">
+				<div style="text-align:center; margin-bottom:2rem;">
+					<h2>Text to Braille Converter</h2>
+					<p>Type any English text below to see its Braille representation (client-side).</p>
+				</div>
+
+				<div class="card" style="max-width:800px; margin:0 auto;">
+					<div class="form-group">
+						<label for="text-input" style="font-weight:600; margin-bottom:0.5rem; display:block;">
+							Enter Text:
+						</label>
+						<textarea id="text-input" class="form-control" rows="4" placeholder="Type here…"
+							aria-label="English text to convert to Braille"></textarea>
+					</div>
+					<div style="display:flex; gap:1rem; justify-content:flex-end; flex-wrap:wrap;">
+						<button onclick="clearTextFields()" class="btn btn-outline">Clear</button>
+						<button onclick="convertToBraille()" class="btn btn-primary">Convert to Braille</button>
+					</div>
+
+					<div style="margin-top:3rem;" id="braille-output-section" aria-live="polite">
+						<h3>Braille Output</h3>
+						<div class="braille-display" id="braille-output-text" aria-label="Braille output"></div>
+						<p style="margin-top:1rem; color:#666; font-size:0.9rem;">* Using Unicode Braille Patterns</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ── HOW IT WORKS ──────────────────────────────────────────── -->
+		<div id="section-how-it-works" class="page-section">
+			<div class="container">
+				<div style="text-align:center; margin-bottom:3rem;">
+					<h1>How It Works</h1>
+					<p style="font-size:1.2rem; max-width:700px; margin:0 auto; color:var(--text-light);">
+						SpeakDots uses advanced Deep Learning and Computer Vision to bridge the communication gap.
+					</p>
+				</div>
+
+				<div class="features-grid">
+					<div class="card feature-card" style="text-align:left;">
+						<div class="step-number">1</div>
+						<h3>Image Preprocessing</h3>
+						<p>When you upload an image, our system first cleans it. We apply noise reduction, thresholding,
+							and contour detection to isolate the individual Braille dots from the paper texture.</p>
+					</div>
+					<div class="card feature-card" style="text-align:left;">
+						<div class="step-number">2</div>
+						<h3>Character Segmentation</h3>
+						<p>The system identifies each Braille cell (a 2×3 grid of dots). It slices the image into
+							individual character blocks, preparing them for the recognition engine.</p>
+					</div>
+					<div class="card feature-card" style="text-align:left;">
+						<div class="step-number">3</div>
+						<h3>CNN Recognition</h3>
+						<p>A Convolutional Neural Network (CNN) trained on thousands of Braille samples analyses each
+							cell. It predicts the corresponding English letter with high accuracy.</p>
+					</div>
+					<div class="card feature-card" style="text-align:left;">
+						<div class="step-number">4</div>
+						<h3>Text Reconstruction</h3>
+						<p>The recognised characters are stitched back together into words and sentences. Finally, our
+							Text-to-Speech engine converts this text into spoken audio.</p>
+					</div>
+				</div>
+
+				<div class="card" style="text-align:center; margin-top:2rem; background:#E8EAF6;">
+					<h2>The Architecture</h2>
+					<div class="arch-block">
+						[ Input Image ] → [ OpenCV Processing ] → [ CNN Model ] → [ Text Output ]
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ── ACCESSIBILITY ─────────────────────────────────────────── -->
+		<div id="section-accessibility" class="page-section">
+			<div class="container">
+				<section style="padding:2rem 0;">
+					<h1>Accessibility Statement</h1>
+					<p>SpeakDots is committed to ensuring digital accessibility for people with disabilities. We are
+						continually improving the user experience for everyone and applying the relevant accessibility
+						standards.</p>
+				</section>
+
+				<div class="card">
+					<h2>Our Accessibility Features</h2>
+					<ul style="list-style:none; padding:0; margin-top:1.5rem;">
+						<li style="margin-bottom:1.5rem; display:flex; gap:1rem; align-items:flex-start;">
+							<span style="color:var(--secondary-color); font-size:1.5rem;" aria-hidden="true">⌨️</span>
+							<div>
+								<h3>Keyboard Navigation</h3>
+								<p>All interactive elements are focusable and navigable using the Tab key, ensuring
+									users who cannot use a mouse can still operate the platform effectively.</p>
+							</div>
+						</li>
+						<li style="margin-bottom:1.5rem; display:flex; gap:1rem; align-items:flex-start;">
+							<span style="color:var(--secondary-color); font-size:1.5rem;" aria-hidden="true">🎨</span>
+							<div>
+								<h3>High Contrast &amp; Readability</h3>
+								<p>We strictly adhere to WCAG AA standards for color contrast. Our typography is chosen
+									for maximum legibility, with scalable text sizes.</p>
+							</div>
+						</li>
+						<li style="margin-bottom:1.5rem; display:flex; gap:1rem; align-items:flex-start;">
+							<span style="color:var(--secondary-color); font-size:1.5rem;" aria-hidden="true">🔊</span>
+							<div>
+								<h3>Screen Reader Compatibility</h3>
+								<p>The site structure uses semantic HTML5 landmarks (nav, main, footer) and ARIA labels
+									where necessary to support screen reading software.</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<div class="card" style="margin-top:2rem;">
+					<h2>Feedback</h2>
+					<p>We welcome your feedback on the accessibility of SpeakDots. Please let us know if you encounter
+						accessibility barriers.</p>
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+	<!-- ═══════════════════════════ FOOTER ══════════════════════════ -->
+	<footer>
+		<div class="container">
+			<div class="footer-links">
+				<a href="#" onclick="showSection('how-it-works'); return false;">Technology</a>
+				<a href="#" onclick="showSection('accessibility'); return false;">Accessibility Statement</a>
+				<a href="https://github.com" target="_blank" rel="noopener noreferrer">Github</a>
+			</div>
+			<p>&copy; 2024 SpeakDots Assistive Technology. Designed for Accessibility.</p>
+		</div>
+	</footer>
+
+	<!-- ═══════════════════════════ SCRIPTS ══════════════════════════ -->
+	<script>
+		// ── Section navigation ──────────────────────────────────────────
+		const sections = ['home', 'convert-img', 'text-braille', 'how-it-works', 'accessibility'];
+
+		function showSection(id) {
+			sections.forEach(s => {
+				document.getElementById('section-' + s).classList.remove('active');
+				const navEl = document.getElementById('nav-' + s);
+				if (navEl) navEl.classList.remove('active');
+			});
+			document.getElementById('section-' + id).classList.add('active');
+			const navEl = document.getElementById('nav-' + id);
+			if (navEl) navEl.classList.add('active');
+			// Close mobile menu
+			document.getElementById('nav-links').classList.remove('open');
+			document.getElementById('nav-toggle').setAttribute('aria-expanded', 'false');
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+
+		// Mobile nav toggle
+		document.getElementById('nav-toggle').addEventListener('click', function () {
+			const links = document.getElementById('nav-links');
+			const open = links.classList.toggle('open');
+			this.setAttribute('aria-expanded', String(open));
+		});
+
+		// Set initial active nav
+		showSection('home');
+
+		// ── File upload (AJAX → /digest) ────────────────────────────────
+		const fileInput = document.getElementById('file-input');
+		const uploadLabel = document.getElementById('upload-label');
+		const labelText = document.getElementById('upload-label-text');
+		const convertBtn = document.getElementById('convert-btn');
+		const loadingBtn = document.getElementById('loading-btn');
+		const cancelBtn = document.getElementById('cancel-btn');
+		const progressWrap = document.getElementById('progress-wrap');
+		const progressBar = document.getElementById('progress-bar');
+		const progressLabel = document.getElementById('progress-label');
+		const alertWrapper = document.getElementById('alert-wrapper');
+		const resultArea = document.getElementById('result-area');
+		const resultImage = document.getElementById('result-image');
+		const resultText = document.getElementById('result-text');
+
+		let activeRequest = null;
+
+		// File selected via input
+		fileInput.addEventListener('change', function () {
+			if (this.files.length > 0) {
+				labelText.textContent = this.files[0].name;
+				uploadLabel.classList.add('selected');
+			}
+		});
+
+		// Drag & drop
+		uploadLabel.addEventListener('dragover', e => { e.preventDefault(); uploadLabel.classList.add('drag-over'); });
+		uploadLabel.addEventListener('dragleave', () => uploadLabel.classList.remove('drag-over'));
+		uploadLabel.addEventListener('drop', e => {
+			e.preventDefault();
+			uploadLabel.classList.remove('drag-over');
+			if (e.dataTransfer.files.length > 0) {
+				fileInput.files = e.dataTransfer.files;
+				labelText.textContent = e.dataTransfer.files[0].name;
+				uploadLabel.classList.add('selected');
+			}
+		});
+
+		function showAlert(message, type) {
+			const icons = { success: '✅', danger: '❌', warning: '⚠️', info: 'ℹ️' };
+			alertWrapper.innerHTML = `
+            <div class="alert alert-${type}" role="alert">
+                <span aria-hidden="true">${icons[type] || 'ℹ️'}</span>
+                <span>${message}</span>
+            </div>`;
+		}
+
+		function uploadFile() {
+			if (!fileInput.value) {
+				showAlert('No file selected. Please choose a Braille image to upload.', 'warning');
+				return;
+			}
+
+			// Prepare
+			alertWrapper.innerHTML = '';
+			resultArea.style.display = 'none';
+			fileInput.disabled = true;
+			convertBtn.style.display = 'none';
+			loadingBtn.style.display = 'inline-block';
+			cancelBtn.style.display = 'inline-block';
+			progressWrap.style.display = 'block';
+
+			const data = new FormData();
+			data.append('file', fileInput.files[0]);
+			document.cookie = `filesize=${fileInput.files[0].size}`;
+
+			const request = new XMLHttpRequest();
+			activeRequest = request;
+			request.responseType = 'json';
+
+			request.upload.addEventListener('progress', function (e) {
+				const pct = Math.floor((e.loaded / e.total) * 100);
+				progressBar.style.width = pct + '%';
+				progressLabel.textContent = pct + '% uploaded';
+			});
+
+			request.addEventListener('load', function () {
+				if (request.status === 200) {
+					if (request.response.error) {
+						showAlert(request.response.message, 'danger');
+					} else {
+						// Update processed image
+						resultImage.src = '/procimage/' + request.response.img_id + '?' + Date.now();
+						// Display recognised text
+						const digest = request.response.digest || '(no text recognised)';
+						resultText.textContent = digest;
+						resultArea.style.display = 'block';
+						showAlert(request.response.message, 'success');
+						// Scroll to result
+						resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}
+				} else {
+					showAlert('Error processing file. Please try again.', 'danger');
+				}
+				resetUploadUI();
+			});
+
+			request.addEventListener('error', function () {
+				showAlert('Network error. Check your connection and try again.', 'danger');
+				resetUploadUI();
+			});
+
+			request.addEventListener('abort', function () {
+				showAlert('Upload cancelled.', 'info');
+				resetUploadUI();
+			});
+
+			cancelBtn.onclick = function () { request.abort(); };
+
+			request.open('POST', '/digest');
+			request.send(data);
+		}
+
+		function resetUploadUI() {
+			fileInput.disabled = false;
+			fileInput.value = '';
+			labelText.textContent = 'Drag & Drop or Click to Upload';
+			uploadLabel.classList.remove('selected', 'drag-over');
+			convertBtn.style.display = 'inline-block';
+			loadingBtn.style.display = 'none';
+			cancelBtn.style.display = 'none';
+			progressWrap.style.display = 'none';
+			progressBar.style.width = '0%';
+			progressLabel.textContent = '0% uploaded';
+			activeRequest = null;
+		}
+
+		function clearResult() {
+			resultArea.style.display = 'none';
+			alertWrapper.innerHTML = '';
+			resultText.textContent = '';
+		}
+
+		// ── Text-to-Speech (Play button) ───────────────────────────────
+		function speakResult() {
+			const text = resultText.textContent.trim();
+			if (!text || text === '(no text recognised)') {
+				showAlert('Nothing to speak yet. Convert an image first.', 'warning');
+				return;
+			}
+			if (!('speechSynthesis' in window)) {
+				showAlert('Your browser does not support text-to-speech.', 'danger');
+				return;
+			}
+			window.speechSynthesis.cancel();
+			const utterance = new SpeechSynthesisUtterance(text);
+			utterance.rate = 0.9;
+			utterance.pitch = 0.8;
+			utterance.lang = 'en-US';
+			const voices = window.speechSynthesis.getVoices();
+			if (voices.length > 1) utterance.voice = voices[1];
+			window.speechSynthesis.speak(utterance);
+		}
+
+		// ── Text → Braille ──────────────────────────────────────────────
+		const BRAILLE_MAP = {
+			'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑', 'f': '⠋', 'g': '⠛', 'h': '⠓', 'i': '⠊', 'j': '⠚',
+			'k': '⠅', 'l': '⠇', 'm': '⠍', 'n': '⠝', 'o': '⠕', 'p': '⠏', 'q': '⠟', 'r': '⠗', 's': '⠎', 't': '⠞',
+			'u': '⠥', 'v': '⠧', 'w': '⠺', 'x': '⠭', 'y': '⠽', 'z': '⠵',
+			'A': '⠠⠁', 'B': '⠠⠃', 'C': '⠠⠉', 'D': '⠠⠙', 'E': '⠠⠑', 'F': '⠠⠋', 'G': '⠠⠛', 'H': '⠠⠓', 'I': '⠠⠊', 'J': '⠠⠚',
+			'K': '⠠⠅', 'L': '⠠⠇', 'M': '⠠⠍', 'N': '⠠⠝', 'O': '⠠⠕', 'P': '⠠⠏', 'Q': '⠠⠟', 'R': '⠠⠗', 'S': '⠠⠎', 'T': '⠠⠞',
+			'U': '⠠⠥', 'V': '⠠⠧', 'W': '⠠⠺', 'X': '⠠⠭', 'Y': '⠠⠽', 'Z': '⠠⠵',
+			'0': '⠼⠚', '1': '⠼⠁', '2': '⠼⠃', '3': '⠼⠉', '4': '⠼⠙', '5': '⠼⠑',
+			'6': '⠼⠋', '7': '⠼⠛', '8': '⠼⠓', '9': '⠼⠊',
+			' ': ' ', '.': '⠲', ',': '⠂', '?': '⠦', '!': '⠖', '-': '⠤'
+		};
+
+		function convertToBraille() {
+			const input = document.getElementById('text-input').value;
+			const output = document.getElementById('braille-output-text');
+			let result = '';
+			for (const ch of input) {
+				result += BRAILLE_MAP[ch] !== undefined ? BRAILLE_MAP[ch] : ch;
+			}
+			output.textContent = result;
+		}
+
+		function clearTextFields() {
+			document.getElementById('text-input').value = '';
+			document.getElementById('braille-output-text').textContent = '';
+		}
+	</script>
+
+</body>
+
+</html>
