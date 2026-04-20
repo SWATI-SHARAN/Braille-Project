@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h2>Convert Braille Image to Text</h2>
+    <p>Upload a clear image of a Braille document to extract its content.</p>
+  </div>
+
+  <div class="card" style="max-width: 800px; margin: 0 auto;">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="file-upload" class="file-upload-area" style="display: block;">
+          <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">📂</span>
+          <span style="font-weight: 600;">Drag & Drop or Click to Upload</span>
+          <span style="display: block; font-size: 0.9rem; color: #777; margin-top: 0.5rem;">Supports JPG, PNG,
+            JPEG</span>
+          <input type="file" name="file" id="file-upload" class="sr-only" onchange="this.form.submit()">
+        </label>
+      </div>
+      <!-- Loading Indicator (Hidden by default, shown on submit) -->
+      <div id="loading" style="display: none; text-align: center; color: var(--primary-color);">
+        <p>Processing image... please wait.</p>
+      </div>
+    </form>
+
+    {% if msg %}
+    <div
+      style="margin-top: 2rem; padding: 1rem; border-radius: var(--radius); background: #E3F2FD; text-align: center;">
+      <strong>{{ msg }}</strong>
+    </div>
+    {% endif %}
+
+    {% if img_src %}
+    <div style="margin-top: 2rem; text-align: center;">
+      <img src="{{ img_src }}" alt="Uploaded Braille Image"
+        style="max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);">
+    </div>
+    {% endif %}
+
+    {% if extracted_text %}
+    <div style="margin-top: 2rem;">
+      <h3>Recognized Text</h3>
+      <div
+        style="padding: 1.5rem; background: #F5F5F5; border-radius: var(--radius); font-size: 1.2rem; min-height: 100px;">
+        {{ extracted_text }}
+      </div>
+      <div style="margin-top: 1rem; text-align: right;">
+        <button onclick="speakText()" class="btn btn-secondary">🔊 Play Audio</button>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Show loading state when file input changes
+  const fileInput = document.getElementById('file-upload');
+  const loadingDiv = document.getElementById('loading');
+
+  fileInput.addEventListener('change', function () {
+    if (this.files.length > 0) {
+      document.querySelector('.file-upload-area').style.opacity = '0.5';
+      loadingDiv.style.display = 'block';
+    }
+  });
+
+  // Text to Speech
+  function speakText() {
+    // Use the jinja variable safely
+    const textToSpeak = `{{ extracted_text if extracted_text else '' }}`;
+    if (textToSpeak && 'speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Your browser does not support text-to-speech or no text was found.");
+    }
+  }
+</script>
+{% endblock %}

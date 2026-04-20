@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+  <section class="hero animate-fade-in">
+    <h1>Making Braille Accessible Through AI</h1>
+    <p>SpeakDots bridges the gap between physical Braille and digital text. Instantly convert Braille images to English
+      text and speech, or translate everyday text into Braille.</p>
+    <div style="display: flex; justify-content: center; gap: 1rem;">
+      <a href="{{ url_for('upload_page') }}" class="btn btn-primary">Convert Braille Image</a>
+      <a href="{{ url_for('convert_text_page') }}" class="btn btn-secondary">Text to Braille</a>
+    </div>
+  </section>
+
+  <section class="features-grid">
+    <div class="card feature-card">
+      <div class="feature-icon">👁️‍🗨️</div>
+      <h3>Optical Braille Recognition</h3>
+      <p>Advanced CNN technology extracts characters from images with high precision.</p>
+    </div>
+    <div class="card feature-card">
+      <div class="feature-icon">🔊</div>
+      <h3>Text-to-Speech</h3>
+      <p>Listen to your converted molecules instantly with our built-in audio engine.</p>
+    </div>
+    <div class="card feature-card">
+      <div class="feature-icon">⌨️</div>
+      <h3>Bidirectional Tool</h3>
+      <p>Not just reading—write and learn Braille by converting English text to dots.</p>
+    </div>
+  </section>
+</div>
+{% endblock %}

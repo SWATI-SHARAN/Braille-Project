@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h2>Text to Braille Converter</h2>
+    <p>Type any English text below to see its Braille representation (Client-side Version).</p>
+  </div>
+
+  <div class="card" style="max-width: 800px; margin: 0 auto;">
+    <div class="form-group">
+      <label for="text-input" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Enter Text:</label>
+      <textarea id="text-input" class="form-control" rows="4" placeholder="Type here..."></textarea>
+    </div>
+    <div style="text-align: right; display: flex; gap: 1rem; justify-content: flex-end;">
+      <button onclick="clearTextFields()" class="btn btn-outline">Clear</button>
+      <button onclick="convertToBraille()" class="btn btn-primary">Convert to Braille</button>
+    </div>
+
+    <div style="margin-top: 3rem;">
+      <h3>Braille Output</h3>
+      <textarea id="braille-output-text" class="form-control" rows="4" readonly
+        style="font-size: 2rem; letter-spacing: 0.1rem; line-height: 1.5; background-color: #FAFAFA;"></textarea>
+      <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">* Using Unicode Braille Patterns</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function convertToBraille() {
+    var inputText = document.getElementById("text-input").value;
+    var brailleText = convertToBrailleFunction(inputText);
+    document.getElementById("braille-output-text").value = brailleText;
+  }
+
+  function convertToBrailleFunction(text) {
+    const brailleMap = {
+      "a": "⠁", "b": "⠃", "c": "⠉", "d": "⠙", "e": "⠑", "f": "⠋", "g": "⠛", "h": "⠓", "i": "⠊", "j": "⠚",
+      "k": "⠅", "l": "⠇", "m": "⠍", "n": "⠝", "o": "⠕", "p": "⠏", "q": "⠟", "r": "⠗", "s": "⠎", "t": "⠞",
+      "u": "⠥", "v": "⠧", "w": "⠺", "x": "⠭", "y": "⠽", "z": "⠵",
+      " ": " ",
+      "0": "⠼⠚", "1": "⠼⠁", "2": "⠼⠃", "3": "⠼⠉", "4": "⠼⠙", "5": "⠼⠑", "6": "⠼⠋", "7": "⠼⠛", "8": "⠼⠓", "9": "⠼⠊",
+      ".": "⠲", ",": "⠂", "?": "⠦", "!": "⠖", "-": "⠤"
+    };
+
+    let brailleText = "";
+    for (let i = 0; i < text.length; i++) {
+      const char = text.charAt(i).toLowerCase();
+      if (brailleMap[char]) {
+        brailleText += brailleMap[char];
+      } else {
+        brailleText += char;
+      }
+    }
+    return brailleText;
+  }
+
+  function clearTextFields() {
+    document.getElementById("text-input").value = "";
+    document.getElementById("braille-output-text").value = "";
+  }
+</script>
+{% endblock %}

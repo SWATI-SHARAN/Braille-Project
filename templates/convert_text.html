@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2>Text to Braille Converter</h2>
+        <p>Type any English text below to see its Braille representation.</p>
+    </div>
+
+    <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <form action="{{ url_for('convert_text_page') }}" method="post">
+            <div class="form-group">
+                <label for="text-input" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Enter
+                    Text:</label>
+                <textarea id="text-input" name="text" rows="4" class="form-control" placeholder="Type here..."
+                    required>{{ original_text }}</textarea>
+            </div>
+            <div style="text-align: right;">
+                <button type="submit" class="btn btn-primary">Convert to Braille</button>
+            </div>
+        </form>
+
+        {% if braille_output %}
+        <div style="margin-top: 3rem;">
+            <h3>Braille Output</h3>
+            <div
+                style="padding: 2rem; background: #FFF; border: 2px solid var(--primary-color); border-radius: var(--radius); font-size: 2.5rem; letter-spacing: 0.2rem; overflow-wrap: break-word; line-height: 1.5;">
+                {{ braille_output }}
+            </div>
+            <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">* Using Unicode Braille Patterns</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

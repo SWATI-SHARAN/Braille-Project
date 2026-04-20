@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <section class="hero" style="background: none; text-align: left; padding: 2rem 0;">
+        <h1>Accessibility Statement</h1>
+        <p>SpeakDots is committed to ensuring digital accessibility for people with disabilities. We are continually
+            improving the user experience for everyone and applying the relevant accessibility standards.</p>
+    </section>
+
+    <div class="card">
+        <h2>Our Accessibility Features</h2>
+        <ul style="list-style: none; padding: 0; margin-top: 1.5rem;">
+            <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: start;">
+                <span style="color: var(--secondary-color); font-size: 1.5rem;">⌨️</span>
+                <div>
+                    <h3>Keyboard Navigation</h3>
+                    <p>All interactive elements are focusable and navigable using the Tab key, ensuring users who cannot
+                        use a mouse can still operate the platform effectively.</p>
+                </div>
+            </li>
+            <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: start;">
+                <span style="color: var(--secondary-color); font-size: 1.5rem;">🎨</span>
+                <div>
+                    <h3>High Contrast & Readability</h3>
+                    <p>We strictly adhere to WCAG AA standards for color contrast. Our typography is chosen for maximum
+                        legibility, with scalable text sizes.</p>
+                </div>
+            </li>
+            <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: start;">
+                <span style="color: var(--secondary-color); font-size: 1.5rem;">🔊</span>
+                <div>
+                    <h3>Screen Reader Compatibility</h3>
+                    <p>The site structure uses semantic HTML5 landmarks (nav, main, footer) and ARIA labels where
+                        necessary to support screen reading software.</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card" style="margin-top: 2rem;">
+        <h2>Feedback</h2>
+        <p>We welcome your feedback on the accessibility of SpeakDots. Please let us know if you encounter accessibility
+            barriers.</p>
+    </div>
+</div>
+{% endblock %}
